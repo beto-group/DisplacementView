@@ -172,7 +172,7 @@ function DisplacementComponent(props) {
                 const styleSheet = document.createElement("style");
                 styleSheet.innerHTML = `
                     .lil-gui {
-                        --background-color: ${obsidianBgHex}ee !important;
+                        --background-color: ${obsidianBgHex} !important;
                         --text-color: ${obsidianTextHex} !important;
                         --title-background-color: ${obsidianBgHex} !important;
                         --widget-color: rgba(255, 255, 255, 0.05) !important;
@@ -205,10 +205,10 @@ function DisplacementComponent(props) {
 
                 const io = gui.addFolder('Export');
                 io.add(refs.CONFIG, 'videoURL').name('Video URL');
-                io.add({ load: function () { loadVideoFromURL(refs.CONFIG.videoURL); } }, 'load').name('▶ Load URL');
-                io.add({ load: function () { document.getElementById('displacement-file-input').click(); } }, 'load').name('📂 Local File');
-                io.add({ shot: takeScreenshot }, 'shot').name('📷 Screenshot');
-                refs.recordBtnCtrl = io.add({ rec: toggleRecord }, 'rec').name('🔴 Start Recording');
+                io.add({ load: function () { loadVideoFromURL(refs.CONFIG.videoURL); } }, 'load').name('Load URL');
+                io.add({ load: function () { document.getElementById('displacement-file-input').click(); } }, 'load').name('Local File');
+                io.add({ shot: takeScreenshot }, 'shot').name('Screenshot');
+                refs.recordBtnCtrl = io.add({ rec: toggleRecord }, 'rec').name('Start Recording');
                 io.add(refs.CONFIG, 'bitrate', 1000000, 50000000, 1000000).name('Bitrate (bps)');
 
                 ef.open();
@@ -396,12 +396,12 @@ function DisplacementComponent(props) {
         try {
             recorder.start(1000);
             setIsRecording(true);
-            if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("⬛ Stop Recording");
+            if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("Stop Recording");
         } catch (e) {
             console.error("Start error:", e);
             alert("Could not start recording.");
             setIsRecording(false);
-            if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("🔴 Start Recording");
+            if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("Start Recording");
         }
     }
 
@@ -409,7 +409,7 @@ function DisplacementComponent(props) {
         if (!refs.mediaRecorder || refs.mediaRecorder.state === "inactive") return;
         try { refs.mediaRecorder.stop(); } catch (e) { console.error(e); }
         setIsRecording(false);
-        if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("⏳ Saving...");
+        if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("Saving...");
     }
 
     function toggleRecord() {
@@ -420,7 +420,7 @@ function DisplacementComponent(props) {
     function saveVideo() {
         if (!refs.recordedChunks || refs.recordedChunks.length === 0) {
             console.warn("Recording is empty.");
-            if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("🔴 Start Recording");
+            if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("Start Recording");
             setIsRecording(false);
             return;
         }
@@ -443,7 +443,7 @@ function DisplacementComponent(props) {
         setTimeout(function () {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("🔴 Start Recording");
+            if (refs.recordBtnCtrl) refs.recordBtnCtrl.name("Start Recording");
             setIsRecording(false);
         }, 600);
     }
@@ -492,9 +492,13 @@ function DisplacementComponent(props) {
                     fontWeight: 'bold', fontFamily: 'monospace',
                     boxShadow: '0 0 15px #e74c3c',
                     zIndex: 999,
-                    animation: 'pulse 1s infinite'
+                    animation: 'pulse 1s infinite',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
                 }}>
-                    REC ●
+                    <dc.Icon icon="circle" style={{ fill: 'currentColor', fontSize: '10px' }} />
+                    RECORDING
                     <style>{`@keyframes pulse { 50% { opacity: 0.5; } }`}</style>
                 </div>
             )}
